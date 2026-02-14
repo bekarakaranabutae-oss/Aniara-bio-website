@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ANIARA BORAUEA 🇰🇮 | GOD MODE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Roboto+Mono&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --neon:#00fff7;
+  --pink:#ff2fd4;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  height:100vh;
+  background:black;
+  color:var(--neon);
+  font-family:'Roboto Mono', monospace;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+/* MATRIX CANVAS */
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+}
+
+/* Scan lines */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.04) 0px,
+    rgba(255,255,255,0.04) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  pointer-events:none;
+  z-index:-1;
+}
+
+/* Card */
+.card{
+  width:90%;
+  max-width:420px;
+  background:rgba(0,0,0,0.75);
+  border:2px solid var(--neon);
+  box-shadow:0 0 40px var(--neon);
+  padding:25px;
+  text-align:center;
+  position:relative;
+}
+
+/* Glow border */
+.card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(120deg,var(--neon),var(--pink),var(--neon));
+  z-index:-1;
+  filter:blur(18px);
+  opacity:.6;
+}
+
+/* Avatar */
+.avatar{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  border:3px solid var(--neon);
+  box-shadow:0 0 20px var(--neon);
+  margin-bottom:15px;
+}
+
+/* Name */
+.name{
+  font-family:'Orbitron', sans-serif;
+  font-size:22px;
+  letter-spacing:2px;
+}
+
+/* Rank */
+.rank{
+  display:inline-block;
+  margin:10px 0;
+  padding:6px 16px;
+  background:linear-gradient(90deg,var(--neon),var(--pink));
+  color:black;
+  font-size:12px;
+  border-radius:20px;
+}
+
+/* Info */
+.info{
+  font-size:13px;
+  line-height:1.7;
+  margin-top:10px;
+}
+
+/* Terminal */
+.terminal{
+  margin-top:18px;
+  padding-top:10px;
+  border-top:1px solid var(--neon);
+  text-align:left;
+  font-size:12px;
+}
+.cursor{
+  animation:blink 1s infinite;
+}
+@keyframes blink{
+  50%{opacity:0}
+}
+
+/* Music Button */
+.music-btn{
+  margin-top:18px;
+  padding:10px;
+  width:100%;
+  background:black;
+  color:var(--neon);
+  border:1px solid var(--neon);
+  font-family:'Orbitron';
+  cursor:pointer;
+}
+.music-btn:hover{
+  background:var(--neon);
+  color:black;
+}
+
+/* Footer */
+.footer{
+  margin-top:12px;
+  font-size:11px;
+  color:#7afff7;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="card">
+
+  <img src="https://i.imgur.com/6VBx3io.png" class="avatar" alt="Profile">
+
+  <div class="name">ANIARA BORAUEA 🇰🇮</div>
+
+  <div class="rank">GOD MODE · CYBERPUNK</div>
+
+  <div class="info">
+    STATUS : <span style="color:#0f0">ONLINE</span><br>
+    ROLE : DIGITAL CREATOR<br>
+    MODE : GOD UI SIMULATION<br>
+    NODE : KIRIBATI 🇰🇮
+  </div>
+
+  <div class="terminal">
+    > Initializing god-mode core...<br>
+    > Cyberpunk background loaded...<br>
+    > All limits removed...<br>
+    <span style="color:#0f0">> ACCESS GRANTED</span><span class="cursor">_</span>
+  </div>
+
+  <button class="music-btn" onclick="toggleMusic()">🎧 TOGGLE MUSIC</button>
+
+  <div class="footer">
+    © GOD MODE BIO · CYBERPUNK UI
+  </div>
+
+</div>
+
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* MUSIC */
+const music = document.getElementById("bgMusic");
+let playing = false;
+function toggleMusic(){
+  if(!playing){ music.play(); playing = true; }
+  else{ music.pause(); playing = false; }
+}
+
+/* MATRIX EFFECT */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const letters = "01ANIARABORAUEAGODMODE";
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+const drops = Array.from({length: columns}).fill(1);
+
+function drawMatrix(){
+  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#00fff7";
+  ctx.font = fontSize + "px monospace";
+
+  for(let i=0;i<drops.length;i++){
+    const text = letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+    if(drops[i]*fontSize > canvas.height && Math.random() > 0.975){
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+}
+setInterval(drawMatrix, 50);
+
+window.onresize = () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+};
+</script>
+
+</body>
+</html><
